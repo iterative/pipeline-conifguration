@@ -5,10 +5,6 @@ stages:
     - train.py
     params:
     - params.yaml:
-      - file
-    - params-default.yaml:
-      - epochs
-      - size
-    - params-test.yaml:
+      - type
       - epochs
       - size
