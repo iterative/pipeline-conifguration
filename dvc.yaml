@@ -1,0 +1,12 @@
+stages:
+  basic:
+    cmd: ./echo.sh
+    params:
+    - params.yaml:
+      - file
+    - params-default.yaml:
+      - epochs
+      - size
+    - params-test.yaml:
+      - epochs
+      - size
