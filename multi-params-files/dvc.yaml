@@ -1,0 +1,14 @@
+stages:
+  train:
+    cmd: python train.py
+    deps:
+    - train.py
+    params:
+    - params.yaml:
+      - file
+    - params-default.yaml:
+      - epochs
+      - size
+    - params-test.yaml:
+      - epochs
+      - size
