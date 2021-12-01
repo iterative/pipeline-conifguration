@@ -2,12 +2,16 @@ Why? Because it's inconvenient to have a large list of things in `-S` when there
 
 ## Single DVC params file
 
+To run these commands, first `cd single-params-file/`
+
 - default run: `dvc exp run`
   - one modified param: `dvc exp run -S epochs=10`
 - test run: `dvc exp run -S type=test`
   - one modified param: `dvc exp run -S type=test -S test.epochs=10`
 
 ## Multiple DVC params files
+
+To run these commands, first `cd multi-params-files/`
 
 - default run: `dvc exp run`
   - one modified param: `dvc exp run -S params-default.yaml:epochs=10`
