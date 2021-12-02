@@ -1,0 +1,11 @@
+run_mode: prod  # [dev, test, prod]
+config_file: configs/params_prod.yaml
+
+data_load:
+  dataset: large
+  sampling:
+    enable: true
+    size: 50000
+
+train:
+  epochs: 1000

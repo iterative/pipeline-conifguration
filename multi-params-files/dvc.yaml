@@ -1,14 +1,36 @@
 stages:
-  train:
-    cmd: python train.py
+
+  data_load: 
+    cmd: python stages/data_load.py
     deps:
-    - train.py
+    - stages/data_load.py
     params:
     - params.yaml:
-      - file
-    - params-default.yaml:
-      - epochs
-      - size
-    - params-test.yaml:
-      - epochs
-      - size
+      - run_mode
+    - configs/params_dev.yaml:
+      - data_load
+    - configs/params_dev.yaml:
+      - data_load
+    - configs/params_dev.yaml:
+      - data_load
+
+  train:
+    cmd: python stages/train.py
+    deps:
+    - stages/train.py
+    params:
+    - params.yaml:
+      - run_mode
+    - configs/params_dev.yaml:
+      - train
+    - configs/params_dev.yaml:
+      - train
+    - configs/params_dev.yaml:
+      - train
+
+  evaluate:
+    cmd: python stages/evaluate.py --config=params.yaml
+    deps:
+    - stages/evaluate.py
+    params:
+    - evaluate

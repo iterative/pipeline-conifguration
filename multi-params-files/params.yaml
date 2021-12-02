@@ -1,1 +1,13 @@
-file: params-default.yaml
+run_mode: prod  # [dev, test, prod]
+
+configs:
+  dev: configs/params_dev.yaml
+  test: configs/params_test.yaml
+  prod: configs/params_prod.yaml
+
+evaluate:
+  dataset: micro
+  size: 5000
+  metrics: [f1, roc-auc]
+  metrics_file: reports/metrics.json
+  plots_cm: reports/plot_confusion_matrix.png

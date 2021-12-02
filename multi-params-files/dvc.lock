@@ -1,17 +1,45 @@
 schema: '2.0'
 stages:
   train:
-    cmd: python train.py
+    cmd: python stages/train.py
     deps:
-    - path: train.py
-      md5: 8056d94d10b12cfc893a28a79640e47f
-      size: 219
+    - path: stages/train.py
+      md5: a5f15e9e2ca25789e8da1c56e9aeb76e
+      size: 500
     params:
       params.yaml:
-        file: params-default.yaml
-      params-default.yaml:
-        epochs: 1000
-        size: 20000
-      params-test.yaml:
-        epochs: 1
-        size: 5
+        run_mode: prod
+      configs/params_dev.yaml:
+        train:
+          epochs: 10
+  data_load:
+    cmd: python stages/data_load.py
+    deps:
+    - path: stages/data_load.py
+      md5: a478f6d69cbeda79ab4ef109541c9ec7
+      size: 813
+    params:
+      params.yaml:
+        run_mode: prod
+      configs/params_dev.yaml:
+        data_load:
+          dataset: development
+          sampling:
+            enable: true
+            size: 1000
+  evaluate:
+    cmd: python stages/evaluate.py --config=params.yaml
+    deps:
+    - path: stages/evaluate.py
+      md5: 904db0ce5dfe0485db7a8da623922e6b
+      size: 531
+    params:
+      params.yaml:
+        evaluate:
+          dataset: micro
+          size: 5000
+          metrics:
+          - f1
+          - roc-auc
+          metrics_file: reports/metrics.json
+          plots_cm: reports/plot_confusion_matrix.png

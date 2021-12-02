@@ -1,10 +1,23 @@
 stages:
-  train:
-    cmd: python train.py
+  
+  data_load:
+    cmd: python stages/data_load.py
     deps:
-    - train.py
+    - stages/data_load.py
     params:
-    - params.yaml:
-      - type
-      - epochs
-      - size
+    - data_load
+
+  train:
+    cmd: python stages/train.py
+    deps:
+    - stages/train.py
+    params:
+    - train
+
+  data_load_with_preset:
+    cmd: python stages/data_load_with_preset.py
+    deps:
+    - stages/data_load_with_preset.py
+    params:
+    - run_mode
+    - data_load

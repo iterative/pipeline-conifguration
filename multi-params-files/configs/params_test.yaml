@@ -1,0 +1,11 @@
+run_mode: test  # [dev, test, prod]
+config_file: configs/params_test.yaml
+
+data_load:
+  dataset: micro
+  sampling:
+    enable: true
+    size: 5
+
+train:
+  epochs: 3

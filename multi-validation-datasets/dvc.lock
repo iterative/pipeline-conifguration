@@ -1,0 +1,165 @@
+schema: '2.0'
+stages:
+  basic:
+    cmd: ./echo.sh
+    params:
+      params.yaml:
+        file: params-default.yaml
+      params-default.yaml:
+        epochs: 1000
+        size: 20000
+      params-test.yaml:
+        epochs: 1
+        size: 5
+  train:
+    cmd: python stages/train.py
+    deps:
+    - path: stages/train.py
+      md5: 4bf4ade6bd2f8af7a094ee75ebb6a0fd
+      size: 244
+    params:
+      params.yaml:
+        train:
+          epochs: 5
+  data_load:
+    cmd: python stages/data_load.py
+    deps:
+    - path: stages/data_load.py
+      md5: 4be7b2175f5d984dfd72946e0235ca5b
+      size: 427
+    params:
+      params.yaml:
+        data_load:
+          dataset: micro
+          sampling:
+            enable: true
+            size: 5
+  data_load_with_preset:
+    cmd: python stages/data_load_with_preset.py
+    deps:
+    - path: stages/data_load_with_preset.py
+      md5: 3830fea2052aeccd7adac0da3ba2f361
+      size: 377
+    params:
+      params.yaml:
+        data_load:
+          dataset: micro
+          sampling:
+            enable: true
+            size: 5
+        run_mode: prod
+  evaluate@micro:
+    cmd: python stages/evaluate.py --config=params.yaml --dataset=micro
+    deps:
+    - path: stages/evaluate.py
+      md5: 84b6a414e3ade688b5efbbb707ab0571
+      size: 1107
+    params:
+      params.yaml:
+        evaluate:
+          datasets:
+          - micro
+          - customer-1
+          - customer-2
+          size: 5000
+          metrics:
+          - f1
+          - roc-auc
+          metrics_dir: metrics
+          plots_cm: reports/plot_confusion_matrix.png
+        reports_dir: reports
+    outs:
+    - path: reports/metrics/metrics_micro.json
+      md5: 0024a0c57390b1bb3404e677916ccf0c
+      size: 58
+  evaluate@customer-1:
+    cmd: python stages/evaluate.py --config=params.yaml --dataset=customer-1
+    deps:
+    - path: stages/evaluate.py
+      md5: 84b6a414e3ade688b5efbbb707ab0571
+      size: 1107
+    params:
+      params.yaml:
+        evaluate:
+          datasets:
+          - micro
+          - customer-1
+          - customer-2
+          size: 5000
+          metrics:
+          - f1
+          - roc-auc
+          metrics_dir: metrics
+          plots_cm: reports/plot_confusion_matrix.png
+        reports_dir: reports
+    outs:
+    - path: reports/metrics/metrics_customer-1.json
+      md5: a171607f50d7f811aeb990582ceb70cb
+      size: 59
+  evaluate@customer-2:
+    cmd: python stages/evaluate.py --config=params.yaml --dataset=customer-2
+    deps:
+    - path: stages/evaluate.py
+      md5: 84b6a414e3ade688b5efbbb707ab0571
+      size: 1107
+    params:
+      params.yaml:
+        evaluate:
+          datasets:
+          - micro
+          - customer-1
+          - customer-2
+          size: 5000
+          metrics:
+          - f1
+          - roc-auc
+          metrics_dir: metrics
+          plots_cm: reports/plot_confusion_matrix.png
+        reports_dir: reports
+    outs:
+    - path: reports/metrics/metrics_customer-2.json
+      md5: b51847d5a05e34431c098194dc6e6d30
+      size: 57
+  collect_metrics:
+    cmd: python stages/collect_metrics.py --config=params.yaml
+    deps:
+    - path: reports/metrics
+      md5: c6d66f6ffaeb9fa1ec41ee15deac1a60.dir
+      size: 174
+      nfiles: 3
+    - path: stages/collect_metrics.py
+      md5: 694636e8292d81384c1c866d02eca62b
+      size: 938
+    params:
+      params.yaml:
+        collect_metrics:
+          metrics: metrics.json
+        reports_dir: reports
+    outs:
+    - path: reports/metrics.json
+      md5: 0fe5e04977b793c74b7930654fc09b7c
+      size: 297
+  check_metrics:
+    cmd: python stages/check_metrics.py --config=params.yaml
+    deps:
+    - path: reports/metrics.json
+      md5: 0fe5e04977b793c74b7930654fc09b7c
+      size: 297
+    - path: stages/check_metrics.py
+      md5: b3078c71eaf934fa0cfdd8125bf10c30
+      size: 3186
+    params:
+      params.yaml:
+        check_metrics:
+          rules:
+            f1:
+              low: 0.5
+              high: 1.0
+            roc-auc:
+              low: 0.4
+          report: alerts.png
+        reports_dir: reports
+    outs:
+    - path: reports/alerts.png
+      md5: da94242e3f4dfd670959c3c2f23dcc08
+      size: 34063
