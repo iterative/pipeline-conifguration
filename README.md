@@ -36,7 +36,7 @@ dvc exp run -S run_mode=prod
 ## 2. Multiple `params` files
 Project: `multiple-params-files/`
 ```bash 
-cd multi-params-files
+cd multiple-params-files
 ```
 
 1. Move custom configurations for some of stages (`data_load` and `train` for this example) in `configs/` folder:
@@ -55,63 +55,6 @@ dvc exp run -S run_mode=dev
 dvc exp run -S run_mode=test
 dvc exp run -S run_mode=prod
 ```
-
-## 3. Multiple validation datasets
-Project: `multi-ps-files/`
-```bash 
-cd multi-validation-datasets
-```
-
-1. Define list of datasets we need to run evaluation on in `params.yaml`
-Example: 
-```yaml
-evaluate:
-  datasets: ['micro', 'customer-1', 'customer-2']
-  ...
-```
-
-2. Setup `evaluate` stage with `foreach` templating syntax in `dvc.yaml` 
-```yaml
-  evaluate:
-    foreach:
-      ${evaluate.datasets}
-    do:
-      cmd: python stages/evaluate.py --config=params.yaml --dataset=${item}
-      deps:
-      ...
-      params:
-      ...
-      metrics:
-      - ${reports_dir}/${evaluate.metrics_dir}/metrics_${item}.json:
-          cache: false
-```
-
-3. (Optional) Collect metrics into a single `metrics.json` file and run metrics value range checks in separate stages 
-```yaml 
-  collect_metrics:
-    cmd: python stages/collect_metrics.py --config=params.yaml
-    deps:
-    ...
-    - ${reports_dir}/${evaluate.metrics_dir}
-    params:
-    ...
-    metrics:
-    - ${reports_dir}/${collect_metrics.metrics}:
-        cache: false
-  
-
-  check_metrics:
-    cmd: python stages/check_metrics.py --config=params.yaml
-    deps:
-    ...
-    - ${reports_dir}/${collect_metrics.metrics}
-    params:
-    ...
-    plots:
-    - ${reports_dir}/${check_metrics.report}:
-        cache: false
-```
-
 
 ## Install
 

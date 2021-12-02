@@ -1,0 +1,21 @@
+run_mode: prod # [dev, test, micro]
+
+data_load:
+  dataset: micro
+  sampling:
+    enable: true
+    size: 5
+
+train:
+  epochs: 5
+
+data_load_with_preset:
+  dev:
+    name: development
+    size: 1000
+  test:
+    name: micro
+    size: 5
+  prod:
+    name: large
+    size: 50000
