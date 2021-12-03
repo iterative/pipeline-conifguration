@@ -1,12 +1,23 @@
-# Multiple DVC params files
+# Pattern: Multiple `params` files
 
-Why? Because it's inconvenient to have a large list of things in `-S` when there are 2 main groups of params (e.g. testing & default/production).
+Project: `multi-params-files/`
+```bash 
+cd multiple-params-files
+```
 
-- default run: `dvc exp run`
-  - one modified param: `dvc exp run -S params-default.yaml:epochs=10`
-- test run: `dvc exp run -S params.yaml:file=params-test.yaml`
-  - one modified param: `dvc exp run -S params.yaml:file=params-test.yaml -S params-test.yaml:epochs=10`
+1. Move custom configurations for some of stages (`data_load` and `train` for this example) in `configs/` folder:
 
-# Multiple DVC params groups
+  - `dev`: 'configs/params_dev.yaml'
+  - `test`: 'configs/params_test.yaml'
+  - `prod`: 'configs/params_prod.yaml'
 
-Alternative approach at branch [`main`](https://github.com/iterative/multi-params-files/tree/main).
+2. Leave common configurations in `params.yaml`   (including `run_mode`)
+  - only few parameters changes for a selected `run_mode` (e.g. name of dataset, sample size, number of epochs)
+  - it's easy to control selected params in `.py` code
+
+3. Switch between running modes with a command: 
+```bash 
+dvc exp run -S run_mode=dev
+dvc exp run -S run_mode=test
+dvc exp run -S run_mode=prod
+```
