@@ -1,0 +1,39 @@
+schema: '2.0'
+stages:
+  data_load_with_preset:
+    cmd: python stages/data_load_with_preset.py
+    deps:
+    - path: stages/data_load_with_preset.py
+      md5: 3830fea2052aeccd7adac0da3ba2f361
+      size: 377
+    params:
+      params.yaml:
+        data_load:
+          dataset: micro
+          sampling:
+            enable: true
+            size: 5
+        run_mode: prod
+  train:
+    cmd: python stages/train.py
+    deps:
+    - path: stages/train.py
+      md5: 4bf4ade6bd2f8af7a094ee75ebb6a0fd
+      size: 244
+    params:
+      params.yaml:
+        train:
+          epochs: 10
+  data_load:
+    cmd: python stages/data_load.py
+    deps:
+    - path: stages/data_load.py
+      md5: 4be7b2175f5d984dfd72946e0235ca5b
+      size: 427
+    params:
+      params.yaml:
+        data_load:
+          dataset: micro
+          sampling:
+            enable: true
+            size: 5

@@ -1,6 +1,6 @@
 # Pattern: Multiple `params` files
 
-Project: `multiple-params-files/`
+Project: `multi-params-files/`
 ```bash 
 cd multiple-params-files
 ```

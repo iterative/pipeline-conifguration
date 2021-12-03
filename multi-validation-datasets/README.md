@@ -52,3 +52,8 @@ evaluate:
     - ${reports_dir}/${check_metrics.report}:
         cache: false
 ```
+
+Run pipeline
+```bash
+dvc exp run
+```

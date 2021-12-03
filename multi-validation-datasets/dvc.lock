@@ -70,8 +70,8 @@ stages:
         reports_dir: reports
     outs:
     - path: reports/metrics/metrics_micro.json
-      md5: df72f7285a63c8abd7d92841fea4ec75
-      size: 57
+      md5: 2ddba229241405e66fc772699d85b60c
+      size: 58
   evaluate@customer-1:
     cmd: python stages/evaluate.py --config=params.yaml --dataset=customer-1
     deps:
@@ -94,8 +94,8 @@ stages:
         reports_dir: reports
     outs:
     - path: reports/metrics/metrics_customer-1.json
-      md5: e7aefe9ba13cb8068e4c1297652b4c52
-      size: 58
+      md5: 9bcd31d0fd261f5923e5af0916584d0d
+      size: 59
   evaluate@customer-2:
     cmd: python stages/evaluate.py --config=params.yaml --dataset=customer-2
     deps:
@@ -118,14 +118,14 @@ stages:
         reports_dir: reports
     outs:
     - path: reports/metrics/metrics_customer-2.json
-      md5: 0493807e6cc140d3842b3c59f0babfe3
+      md5: bce6f5cc6412b5251e29b2eeaf2af0f8
       size: 57
   collect_metrics:
     cmd: python stages/collect_metrics.py --config=params.yaml
     deps:
     - path: reports/metrics
-      md5: a1192ca6dc65a7dc95b27391dd8be9e0.dir
-      size: 172
+      md5: 9b150cf7a7aee82bbb13d69c85bfb88a.dir
+      size: 174
       nfiles: 3
     - path: stages/collect_metrics.py
       md5: 694636e8292d81384c1c866d02eca62b
@@ -137,14 +137,14 @@ stages:
         reports_dir: reports
     outs:
     - path: reports/metrics.json
-      md5: 874fa3f450e47519961d294a801d6dde
-      size: 295
+      md5: 6f02976d65510deececa50175e24cb49
+      size: 297
   check_metrics:
     cmd: python stages/check_metrics.py --config=params.yaml
     deps:
     - path: reports/metrics.json
-      md5: 874fa3f450e47519961d294a801d6dde
-      size: 295
+      md5: 6f02976d65510deececa50175e24cb49
+      size: 297
     - path: stages/check_metrics.py
       md5: 208c5d1aed79f4111686e254c533153d
       size: 3279
@@ -161,5 +161,5 @@ stages:
         reports_dir: reports
     outs:
     - path: reports/alerts.png
-      md5: b593d3b29e41638214e9d6c2aec4fd7a
-      size: 34826
+      md5: 7a32a5723afc823bdb67f425f878f21e
+      size: 33364
